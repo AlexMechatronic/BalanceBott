@@ -126,7 +126,7 @@ static inline int reg_int_cb(struct int_param_s *int_param)
 #define min(a,b) ((a<b)?a:b)
 
 
-#elif defined MOTION_DRIVER_TARGET_ARDUINO
+#elif defined EMPL_TARGET_ARDUINO
 #ifdef ARDUINO
     #if ARDUINO < 100
         #include "WProgram.h"
@@ -134,7 +134,7 @@ static inline int reg_int_cb(struct int_param_s *int_param)
         #include "Arduino.h"
     #endif
 #endif
-#include "Source\I2Cdev\I2Cdev.h"
+#include <I2Cdev.h>
 #define i2c_write(a, b, c, d)   writeBytes(a, b, d, c, I2CDEV_DEFAULT_READ_TIMEOUT)
 #define i2c_read(a, b, c, d)    readBytes(a, b, d, c)
 #define delay_ms                delay
@@ -144,7 +144,7 @@ static inline int reg_int_cb(struct int_param_s *int_param)
 struct int_param_s *int_param_arduino;
 void ISR_pinInterrupt()
 {
-    int_param_arduino->cb(int_param_arduino->arg);//llama a la funcion con sus argumentos
+    int_param_arduino->cb(int_param_arduino->arg);
 }
 static inline int reg_int_cb(struct int_param_s *int_param)
 {//es para asignar un handler y devolver la llamada en una interrupcion
@@ -155,6 +155,36 @@ static inline int reg_int_cb(struct int_param_s *int_param)
 
 #define log_i       Serial.print
 #define log_e       Serial.print
+#define labs        abs
+#define fabs        abs
+#elif defined MOTION_DRIVER_TARGET_ARDUINO
+#ifdef ARDUINO
+    #if ARDUINO < 100
+        #include "WProgram.h"
+    #else
+        #include "Arduino.h"
+    #endif
+#endif
+#include <I2Cdev.h>
+
+#define i2c_write(a, b, c, d)   I2Cdev::writeBytes(a, b, d, c, I2CDEV_DEFAULT_READ_TIMEOUT)
+#define i2c_read(a, b, c, d)    I2Cdev::readBytes(a, b, d, c)
+#define delay_ms                delay
+#define get_ms(a)               (*a = millis())
+
+struct int_param_s *int_param_arduino;
+void ISR_pinInterrupt()
+{
+    int_param_arduino->cb(int_param_arduino->arg);
+}
+static inline int reg_int_cb(struct int_param_s *int_param)
+{//es para asignar un handler y devolver la llamada en una interrupcion
+    int_param_arduino = int_param;
+    attachInterrupt(digitalPinToInterrupt(int_param->pin, ISR_pinInterrupt, RISING);
+    return 0;
+}
+#define log_i(...)     do {} while (0)
+#define log_e(...)     do {} while (0)
 #define labs        abs
 #define fabs        abs
 #else

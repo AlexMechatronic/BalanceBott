@@ -1,4 +1,8 @@
 #include "PID.h"
+#include "Types.h"
+#include "Utilities.h"
+
+#include <TermIO.h>
 #include <stdio.h>
 
 #define DEFAULT_ERROR 1.0f

@@ -70,10 +70,10 @@
         #include "Arduino.h"
     #endif
 #endif
-#include "Source\I2Cdev\I2Cdev.h"
+#include "I2Cdev.h"
 
-#define i2c_write(a, b, c, d)   writeBytes(a, b, d, c, I2CDEV_DEFAULT_READ_TIMEOUT)
-#define i2c_read(a, b, c, d)    readBytes(a, b, d, c)
+#define i2c_write(a, b, c, d)   I2Cdev::writeBytes(a, b, d, c, I2CDEV_DEFAULT_READ_TIMEOUT)
+#define i2c_read(a, b, c, d)    I2Cdev::readBytes(a, b, d, c)
 #define delay_ms                delay
 #define get_ms(a)               (*a = millis())
 

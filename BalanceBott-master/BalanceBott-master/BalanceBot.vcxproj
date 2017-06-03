@@ -80,23 +80,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BluetoothControl.h" />
     <ClInclude Include="eMPL\dmpKey.h" />
     <ClInclude Include="eMPL\dmpmap.h" />
     <ClInclude Include="eMPL\inv_mpu.h" />
     <ClInclude Include="eMPL\inv_mpu_dmp_motion_driver.h" />
     <ClInclude Include="Source\helper3Dmath\helper_3dmath.h" />
-    <ClInclude Include="Source\helper3Dmath\MahonyAHRS.h" />
     <ClInclude Include="Source\I2Cdev\I2Cdev.h" />
     <ClInclude Include="Source\PID\PID.h" />
     <ClInclude Include="__vm\.BalanceBot.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BalanceBot.c" />
-    <ClCompile Include="BluetoothControl.c" />
     <ClCompile Include="eMPL\inv_mpu.c" />
     <ClCompile Include="eMPL\inv_mpu_dmp_motion_driver.c" />
-    <ClCompile Include="Source\helper3Dmath\MahonyAHRS.c" />
     <ClCompile Include="Source\I2Cdev\I2Cdev.cpp" />
     <ClCompile Include="Source\PID\PID.c" />
   </ItemGroup>
