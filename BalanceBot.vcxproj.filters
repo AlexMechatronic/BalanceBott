@@ -30,9 +30,6 @@
     <ClInclude Include="eMPL\inv_mpu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="eMPL\inv_mpu_dmp_motion_driver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\helper3Dmath\helper_3dmath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,27 +45,42 @@
     <ClInclude Include="Source\helper3Dmath\MahonyAHRS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="eMPL\freeram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eMPL\I2Cdev.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eMPL\inv_mpu_dmp_motion_driver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eMPL\mpu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="eMPL\inv_mpu.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="eMPL\inv_mpu_dmp_motion_driver.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\I2Cdev\I2Cdev.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\PID\PID.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BalanceBot.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BluetoothControl.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\helper3Dmath\MahonyAHRS.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eMPL\I2Cdev.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eMPL\inv_mpu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eMPL\inv_mpu_dmp_motion_driver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eMPL\mpu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

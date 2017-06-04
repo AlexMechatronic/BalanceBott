@@ -1,13 +1,25 @@
 #include "MahonyAHRS.h"
 
-void initAHRS(float samplePeriod, float kp, float ki)
+
+float SamplePeriod;
+float Kp_ = 1.0f;
+float Ki_ = 0.0f;
+
+
+QuaternionStruct Quaternion = { 1.0, 0.0, 0.0, 0.0 };
+
+float eInt_[3] = { 0.0f, 0.0f, 0.0f }; //error acumulado
+
+
+
+static void initAHRS(float samplePeriod, float kp, float ki)
 {
 	SamplePeriod = samplePeriod;
-	Kp = kp;
-	Ki = ki;
+	Kp_ = kp;
+	Ki_ = ki;
 }
 
-QuaternionStruct updateAHRS(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz, float dt)
+ static QuaternionStruct updateAHRS(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz, float dt)
 {
 	float q1 = Quaternion.quaternion[0], q2 = Quaternion.quaternion[1], q3 = Quaternion.quaternion[2], q4 = Quaternion.quaternion[3];   // short name local variable for readability
 	float norm;
@@ -62,23 +74,23 @@ QuaternionStruct updateAHRS(float gx, float gy, float gz, float ax, float ay, fl
 	ex = (ay * vz - az * vy) + (my * wz - mz * wy);
 	ey = (az * vx - ax * vz) + (mz * wx - mx * wz);
 	ez = (ax * vy - ay * vx) + (mx * wy - my * wx);
-	if (Ki > 0.0f)
+	if (Ki_ > 0.0f)
 	{
-		eInt[0] += ex;      // accumulate integral error
-		eInt[1] += ey;
-		eInt[2] += ez;
+		eInt_[0] += ex;      // accumulate integral error
+		eInt_[1] += ey;
+		eInt_[2] += ez;
 	}
 	else
 	{
-		eInt[0] = 0.0f;     // prevent integral wind up
-		eInt[1] = 0.0f;
-		eInt[2] = 0.0f;
+		eInt_[0] = 0.0f;     // prevent integral wind up
+		eInt_[1] = 0.0f;
+		eInt_[2] = 0.0f;
 	}
 
 	// Apply feedback terms
-	gx = gx + Kp * ex + Ki * eInt[0];
-	gy = gy + Kp * ey + Ki * eInt[1];
-	gz = gz + Kp * ez + Ki * eInt[2];
+	gx = gx + Kp_ * ex + Ki_ * eInt_[0];
+	gy = gy + Kp_ * ey + Ki_ * eInt_[1];
+	gz = gz + Kp_ * ez + Ki_ * eInt_[2];
 
 	// Integrate rate of change of quaternion
 	pa = q2;
@@ -100,13 +112,13 @@ QuaternionStruct updateAHRS(float gx, float gy, float gz, float ax, float ay, fl
 	return Quaternion;
 }
 
-QuaternionStruct quaternionRotation(float theta_rads, QuaternionStruct vct, enum _QUATERNION_AXIS_ROTATION dir)
+static QuaternionStruct quaternionRotation(float theta_rads, QuaternionStruct vct, enum _QUATERNION_AXIS_ROTATION dir)
 {
 
 	return vct;
 }
 
-Vector3F quaternionRotation3f(float theta_rads, Vector3F vct, enum _QUATERNION_AXIS_ROTATION dir)
+static Vector3F quaternionRotation3f(float theta_rads, Vector3F vct, enum _QUATERNION_AXIS_ROTATION dir)
 {
 	/*
 	Qrot = sin(theta_rads)/2 + cos(theta_rads)/2 i + cos(theta_rads)/2 j + cos(theta_rads)/2 k
@@ -133,12 +145,12 @@ Vector3F quaternionRotation3f(float theta_rads, Vector3F vct, enum _QUATERNION_A
 	return res;
 }
 
-Vector3F quaternionRotTras3f(float theta_rads, Vector3F vct_to_rot, Vector3F traslation, enum _QUATERNION_AXIS_ROTATION dir)
+static Vector3F quaternionRotTras3f(float theta_rads, Vector3F vct_to_rot, Vector3F traslation, enum _QUATERNION_AXIS_ROTATION dir)
 {
 	return vector3fAdd(quaternionRotation3f(theta_rads, vct_to_rot, dir), traslation);
 }
 
-QuaternionStruct quaternionDot(QuaternionStruct q1, QuaternionStruct q2)
+static QuaternionStruct quaternionDot(QuaternionStruct q1, QuaternionStruct q2)
 {
 	q1.Quaternion.w *= q2.Quaternion.w;
 	q1.Quaternion.x *= q2.Quaternion.x;
@@ -147,7 +159,7 @@ QuaternionStruct quaternionDot(QuaternionStruct q1, QuaternionStruct q2)
 	return q1;
 }
 
-QuaternionStruct quaternionProduct(QuaternionStruct q1, QuaternionStruct q2)
+static QuaternionStruct quaternionProduct(QuaternionStruct q1, QuaternionStruct q2)
 {
 	QuaternionStruct res;
 
@@ -159,7 +171,7 @@ QuaternionStruct quaternionProduct(QuaternionStruct q1, QuaternionStruct q2)
 	return res;
 }
 
-QuaternionStruct quaternionConjugate(QuaternionStruct q)
+static QuaternionStruct quaternionConjugate(QuaternionStruct q)
 {
 	q.Quaternion.x *= -1;
 	q.Quaternion.y *= -1;
@@ -168,7 +180,7 @@ QuaternionStruct quaternionConjugate(QuaternionStruct q)
 	return q;
 }
 
-Vector3F vector3fAdd(Vector3F vct1, Vector3F vct2)
+static Vector3F vector3fAdd(Vector3F vct1, Vector3F vct2)
 {
 	vct1.Vector.x += vct2.Vector.x;
 	vct1.Vector.y += vct2.Vector.y;
@@ -177,7 +189,7 @@ Vector3F vector3fAdd(Vector3F vct1, Vector3F vct2)
 	return vct1;
 }
 
-EulerAnglesStruct getEulerAngles(QuaternionStruct quaternion)
+static EulerAnglesStruct getEulerAngles(QuaternionStruct quaternion)
 {
 	EulerAnglesStruct eulerAnglesStruct;
 	eulerAnglesStruct.Angles.roll = radiansToDegrees(atan2(2.0f * (quaternion.Quaternion.y * quaternion.Quaternion.z - quaternion.Quaternion.w * quaternion.Quaternion.x), 2.0f * quaternion.Quaternion.w * quaternion.Quaternion.w - 1.0f + 2.0f * quaternion.Quaternion.z * quaternion.Quaternion.z));
@@ -186,17 +198,17 @@ EulerAnglesStruct getEulerAngles(QuaternionStruct quaternion)
 	return eulerAnglesStruct;
 }
 
-float radiansToDegrees(float radians)
+static inline float radiansToDegrees(float radians)
 {
 	return 57.2957795130823f * radians;
 }
 
-float degreesToRadians(float degrees)
+static inline float degreesToRadians(float degrees)
 {
 	return degrees / 57.2957795130823f;
 }
 
-QuaternionStruct getLastPosition(void)
+static QuaternionStruct getLastPosition(void)
 {
 	return Quaternion;
 }

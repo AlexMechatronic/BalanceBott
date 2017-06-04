@@ -38,12 +38,12 @@ typedef union {
 
 typedef union {
 	struct {
-		float x;     /* rotation around x axis in degrees */
-		float y;    /* rotation around y axis in degrees */
-		float z;      /* rotation around z axis in degrees */
+		short x;     /* rotation around x axis in degrees */
+		short y;    /* rotation around y axis in degrees */
+		short z;      /* rotation around z axis in degrees */
 	}Vector;
-	float vector[3];
-} Vector3U16;
+	short vector[3];
+} Vector3I16;
 
 typedef union {
 	struct {
@@ -53,8 +53,29 @@ typedef union {
 		float z;
 	}Quaternion;
 	float quaternion[4];
+	long quaternionL[4];
 } QuaternionStruct;
 
+typedef union {
+	struct {
+		short w;
+		short x;
+		short y;
+		short z;
+	}Quaternion;
+	short quaternion[4];
+} QuaternionStructI16;
+
+
+typedef union {
+	struct {
+		long w;
+		long x;
+		long y;
+		long z;
+	}Quaternion;
+	long quaternion[4];
+} QuaternionStructI32;
 
 typedef union {
 	struct {
@@ -65,34 +86,36 @@ typedef union {
 	float angles[3];
 } EulerAnglesStruct;
 
-float SamplePeriod;
-float Kp = 1.0f;
-float Ki = 0.0f;
-
-QuaternionStruct Quaternion = { 1.0, 0.0, 0.0, 0.0 };
-
-float eInt[3] = { 0.0f, 0.0f, 0.0f }; //error acumulado
+typedef union {
+	struct {
+		short roll;     /* rotation around x axis in degrees */
+		short pitch;    /* rotation around y axis in degrees */
+		short yaw;      /* rotation around z axis in degrees */
+	}Angles;
+	short angles[3];
+} EulerAnglesStructI16;
 
 //funciones para la fusion de los sensores
-void initAHRS(float samplePeriod, float kp, float ki); //solo usar si se quiere cambiar
-QuaternionStruct updateAHRS(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz, float dt);
+static void initAHRS(float samplePeriod, float kp, float ki); //solo usar si se quiere cambiar
+static QuaternionStruct updateAHRS(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz, float dt);
 
 //funciones de operacion cinematica con quaterniones
-QuaternionStruct quaternionRotation(float theta_rads, QuaternionStruct vct, enum _QUATERNION_AXIS_ROTATION dir);
-Vector3F quaternionRotation3f(float theta_rads, Vector3F vct, enum _QUATERNION_AXIS_ROTATION dir);
-Vector3F quaternionRotTras3f(float theta_rads, Vector3F vct_to_rot, Vector3F traslation, enum _QUATERNION_AXIS_ROTATION dir);
+static QuaternionStruct quaternionRotation(float theta_rads, QuaternionStruct vct, enum _QUATERNION_AXIS_ROTATION dir);
+static Vector3F quaternionRotation3f(float theta_rads, Vector3F vct, enum _QUATERNION_AXIS_ROTATION dir);
+static Vector3F quaternionRotTras3f(float theta_rads, Vector3F vct_to_rot, Vector3F traslation, enum _QUATERNION_AXIS_ROTATION dir);
 
 //operaciones basicas de cuaterniones
-QuaternionStruct quaternionDot(QuaternionStruct q1, QuaternionStruct q2);
-QuaternionStruct quaternionProduct(QuaternionStruct q1, QuaternionStruct q2);
-QuaternionStruct quaternionConjugate(QuaternionStruct q);
+static QuaternionStruct quaternionDot(QuaternionStruct q1, QuaternionStruct q2);
+static QuaternionStruct quaternionProduct(QuaternionStruct q1, QuaternionStruct q2);
+static QuaternionStruct quaternionConjugate(QuaternionStruct q);
 
 //operaciones basicas de vectores
-Vector3F vector3fAdd(Vector3F vct1, Vector3F vct2);
+static Vector3F vector3fAdd(Vector3F vct1, Vector3F vct2);
 
-EulerAnglesStruct getEulerAngles(QuaternionStruct quaternion);
-float radiansToDegrees(float radians);
+static EulerAnglesStruct getEulerAngles(QuaternionStruct quaternion);
+static inline float radiansToDegrees(float radians);
+static inline float degreesToRadians(float degrees);
 
-QuaternionStruct getLastPosition(void);
+static QuaternionStruct getLastPosition(void);
 
 #endif

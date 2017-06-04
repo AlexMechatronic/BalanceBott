@@ -23,27 +23,27 @@ struct PID {
 
 typedef struct PID PID;
 
-void PID_init(PID* this, float Kp, float Ki, float Kd, float SS_threshold);
+void PID_init(PID* ths, float Kp, float Ki, float Kd, float SS_threshold);
 			
-float PID_update(PID* this, float measured_value, float dt);
+float PID_update(PID* ths, float measured_value, float dt);
 
-void PID_set_setpoint(PID* this, float setpoint);
-float PID_get_Kp(PID* this);
+void PID_set_setpoint(PID* ths, float setpoint);
+float PID_get_Kp(PID* ths);
 
-void PID_set_Kp(PID* this, float Kp);
-void PID_set_Ki(PID* this, float Ki);
-void PID_set_Kd(PID* this, float Kd);
+void PID_set_Kp(PID* ths, float Kp);
+void PID_set_Ki(PID* ths, float Ki);
+void PID_set_Kd(PID* ths, float Kd);
 
 //returns a boolean depending on whether the PID is in a steady state
-char PID_is_steady_state(PID* this);
+char PID_is_steady_state(PID* ths);
 
-char PID_calc_steady_state(PID* this);
-void PID_push_prev_error(PID* this, float error);
-float PID_get_avg_error(PID* this);
-float PID_get_prev_error(PID* this);
-void PID_clear_prev_errors(PID* this);
-void PID_set_SS_threshold(PID* this, float SS_threshold);
+char PID_calc_steady_state(PID* ths);
+void PID_push_prev_error(PID* ths, float error);
+float PID_get_avg_error(PID* ths);
+float PID_get_prev_error(PID* ths);
+void PID_clear_prev_errors(PID* ths);
+void PID_set_SS_threshold(PID* ths, float SS_threshold);
 
-void PID_print_errors(PID* this);
+void PID_print_errors(PID* ths);
 
 #endif //PID_H
